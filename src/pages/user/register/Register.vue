@@ -1,6 +1,6 @@
 <template>
   <section class="login">
-      登录页
+    注册页
   </section>
 </template>
 

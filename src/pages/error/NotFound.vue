@@ -1,6 +1,6 @@
 <template>
   <section class="NotFound">
-      <h1>{{msg}}</h1>
+    <h1>{{ msg }}</h1>
   </section>
 </template>
 

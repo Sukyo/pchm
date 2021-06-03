@@ -1,6 +1,8 @@
 <template>
   <section class="login">
-      注册页
+    <div class="title">
+      登录页
+    </div>
   </section>
 </template>
 
@@ -8,10 +10,10 @@
 import { defineComponent } from "vue";
 
 export default defineComponent({
-    
+  
 })
 </script>
 
-<style>
+<style lang="scss" scoped src="./Login.scss">
 
 </style>
