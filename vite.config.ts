@@ -8,10 +8,13 @@ export interface Params {
   mode: string;
 }
 // https://vitejs.dev/config/
+/**
+ * @type {import('vite').UserConfig}
+ */
 export default ({ mode, command }: Params) => {
-  console.log('command:', command);
   const isProd = mode;
   const userConfig: UserConfig = {
+    base: '/', // 部署应用时的基本URL。
     server: {
       host: '127.0.0.1',
       open: true,
@@ -27,7 +30,7 @@ export default ({ mode, command }: Params) => {
       target: 'es2015',
     },
     optimizeDeps: {
-      entries: ['index.html'],// 定义入口文件避免扫描整个目录导致内存溢出
+      entries: path.resolve(__dirname, 'index.html'),// 定义入口文件避免扫描整个目录导致内存溢出
     },
     plugins: [
       vue(),

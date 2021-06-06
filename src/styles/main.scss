@@ -1,8 +1,14 @@
 * {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
     list-style: none;
     outline: none;
+}
+// 取消图片的双击选中,占位文字的双击选中
+img,
+::placeholder {
+    user-select:none;
 }
 body {
     height: 100vh;
