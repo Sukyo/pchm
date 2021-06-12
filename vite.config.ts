@@ -16,9 +16,9 @@ export default ({ mode, command }: Params) => {
   const userConfig: UserConfig = {
     base: '/', // 部署应用时的基本URL。
     server: {
-      host: '127.0.0.1',
+      host: 'localhost',
       open: true,
-      port: 9090,
+      port: 8080,
     },
     resolve: {
       alias: {

@@ -1,0 +1,11 @@
+.registerDialog {
+    ::v-deep(.el-dialog__header) {
+        padding: 0;
+        .title {
+            line-height: 53px;
+            text-align: center;
+            color: #fefefe;
+            background: linear-gradient(to right, #01C5FA, #1394FA);
+        }
+    }
+}

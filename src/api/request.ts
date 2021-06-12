@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 const config: AxiosRequestConfig = {
     method: 'GET',
-    baseURL: import.meta.env.BASE_URL,
+    baseURL: import.meta.env.VITE_API_URL as string,
     withCredentials: true
 }
 const _fetch: AxiosInstance = axios.create(config)
