@@ -12,7 +12,8 @@
           <el-input v-model="form.phone" placeholder="请输入手机号" prefix-icon="el-icon-user"></el-input>
         </el-form-item>
         <el-form-item prop="password">
-          <el-input v-model="form.password" placeholder="请输入密码" prefix-icon="el-icon-lock"></el-input>
+          <el-input type="password" v-model="form.password" placeholder="请输入密码" prefix-icon="el-icon-lock">
+          </el-input>
         </el-form-item>
         <el-form-item prop="code">
           <el-row>
@@ -49,9 +50,25 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, getCurrentInstance, ref, onMounted, unref, Ref, defineAsyncComponent } from 'vue'
+import {
+  defineComponent,
+  ComponentPublicInstance,
+  reactive,
+  getCurrentInstance,
+  ref,
+  onMounted,
+  unref,
+  Ref,
+  defineAsyncComponent,
+} from 'vue'
 import { login } from '@/api/user'
-import { Validator } from '@/types/elementuiPlus'
+import { Rules, Validator } from '@/types/elementuiPlus'
+import { saveLocal, getLocal } from '@/utils/local'
+import { ElMessage as Message } from 'element-plus'
+import router from '@/router'
+interface ComponentInstance extends ComponentPublicInstance {
+  $rules?: Rules
+}
 export default defineComponent({
   name: 'Login',
   components: {
@@ -59,21 +76,25 @@ export default defineComponent({
       loader: () => import('@/pages/user/components/register/RegisterDialog.vue'),
     }),
   },
+  beforeRouteEnter(to: any, from: any, next: any) {
+    // 已经登录就去首页,没登陆就放行
+    if (getLocal('token')) {
+      return next('/layout')
+    }
+    return next()
+  },
   setup() {
     // 获取全局规则对象
-    const $rules: any = (getCurrentInstance() as any).proxy.$rules
+    const $rules: Rules = (getCurrentInstance()!.proxy as ComponentInstance).$rules!
+    const { requiredBlur, requiredPhone, requiredCode } = $rules
     // 校验规则
     const rules = reactive({
-      phone: $rules.phone,
-      password: $rules.requiredBlur('密码'),
-      code: $rules.code,
+      phone: requiredPhone,
+      password: requiredBlur && requiredBlur({ fieldLabel: '密码' }),
+      code: requiredCode && requiredCode(),
       agree: [{ validator: validateIsAgree }],
     })
-    // 注册框
-    // const registerVisible: Ref<boolean> = ref<boolean>(false)
-    const registerVisible = ref(false)
     const showRegisterDialog = () => (registerVisible.value = true)
-
     return {
       form,
       rules,
@@ -85,31 +106,53 @@ export default defineComponent({
     }
   },
 })
+
 // 表单数据
 const form = reactive({
   verifyCodeUrl: `${import.meta.env.VITE_API_URL}/captcha?type=login`,
   agree: false,
-  phone: '',
-  password: '',
-  code: '',
+  phone: '17673460246',
+  password: '123',
+  code: '1111',
 })
+// 注册框
+const registerVisible: Ref<boolean> = ref<boolean>(false)
 // 更改验证码
 const changeCodeUrl = () => {
-  form.verifyCodeUrl = `${import.meta.env.VITE_API_URL}/captcha?type=login?t=${Date.now()}`
+  form.verifyCodeUrl = `${import.meta.env.VITE_API_URL}/captcha?type=login&t=${Date.now()}`
 }
 
 const formRef: Ref = ref(null)
 // 登录
 const submitLogin = () => {
   // 校验表单
-  unref(formRef).validate(async (valid: boolean) => {
+  unref(formRef).validate((valid: boolean) => {
     if (!valid) return
-    const res = await login({
+    login({
       phone: form.phone,
       password: form.password,
       code: form.code,
+    }).then((res: any) => {
+      if (res.code === 200) {
+        Message({
+          type: 'success',
+          message: '登录成功',
+          duration: 2000,
+        })
+        saveLocal({
+          key: 'token',
+          value: res.data.token,
+        })
+        router.push('/layout')
+      } else {
+        Message({
+          type: 'error',
+          message: res.message,
+          duration: 2000,
+        })
+        changeCodeUrl()
+      }
     })
-    console.log(res)
   })
 }
 // 校验用户条款是否勾选

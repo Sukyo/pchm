@@ -1,17 +1,13 @@
 <template>
-  <Suspense>
-    <router-view />
-  </Suspense>
+  <section class="question">question</section>
 </template>
+
 <script lang="ts">
 import { defineComponent } from 'vue'
 export default defineComponent({
-  name: 'App',
+  name: 'Question',
 })
 </script>
 
-<style>
-.app {
-  height: 100%;
-}
+<style lang="scss" scoped>
 </style>

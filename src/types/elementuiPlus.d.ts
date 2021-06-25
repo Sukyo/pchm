@@ -10,13 +10,15 @@ export interface Rule {
     min?: number,
     pattern?: RegExp,
 }
-export interface RuleType {
-    (fieldLabel: string): Array<Rule>
+export interface Options {
+    fieldLabel?: string
+    min?: number
+    max?: number
 }
 export interface Rules {
-    requiredBlur?: RuleType,
-    requiredChange?: RuleType,
-    email?: Array<Rule>,
-    code?: Array<Rule>,
-    phone?: Array<Rule>,
+    requiredBlur?(options?: Options): Rule[],
+    requiredChange?(options?: Options): Rule[],
+    requiredEmail?: Rule[],
+    requiredCode?(options?: Options): Rule[],
+    requiredPhone?: Rule[],
 }

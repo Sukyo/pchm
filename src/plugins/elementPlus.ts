@@ -1,4 +1,4 @@
-import { Rule, Rules } from '@/types/elementuiPlus';
+import { Options, Rule, Rules } from '@/types/elementuiPlus';
 import {
     ElForm,
     ElFormItem,
@@ -9,7 +9,17 @@ import {
     ElCheckbox,
     ElLink,
     ElButton,
-    ElDialog
+    ElDialog,
+    ElUpload,
+    ElProgress,
+    ElHeader,
+    ElAside,
+    ElContainer,
+    ElMain,
+    ElMessageBox,
+    ElAvatar,
+    ElMenu,
+    ElMenuItem
 } from 'element-plus';
 export default {
     install: (app: any) => {
@@ -24,15 +34,27 @@ export default {
         app.component(ElLink.name, ElLink);
         app.component(ElButton.name, ElButton);
         app.component(ElDialog.name, ElDialog);
+        app.component(ElUpload.name, ElUpload);
+        app.component(ElProgress.name, ElProgress);
+        app.component(ElHeader.name, ElHeader);
+        app.component(ElAside.name, ElAside);
+        app.component(ElContainer.name, ElContainer);
+        app.component(ElMain.name, ElMain);
+        app.component(ElMessageBox.name, ElMessageBox);
+        app.component(ElAvatar.name, ElAvatar);
+        app.component(ElMenu.name, ElMenu);
+        app.component(ElMenuItem.name, ElMenuItem);
         const $rules: Rules = {
-            requiredBlur(fieldLabel: string): Array<Rule> {
+            requiredBlur(options: Options = {}): Rule[] {
+                const { fieldLabel } = options;
                 return [{
                     required: true,
                     message: `${fieldLabel}不能为空`,
                     trigger: 'blur'
                 }]
             },
-            requiredChange(fieldLabel: string): Array<Rule> {
+            requiredChange(options: Options = {}): Rule[] {
+                const { fieldLabel } = options;
                 return [{
                     required: true,
                     message: `${fieldLabel}不能为空`,
@@ -40,7 +62,7 @@ export default {
                 }]
             },
             // 邮箱验证
-            email: [
+            requiredEmail: [
                 {
                     required: true,
                     message: '邮箱不能为空',
@@ -53,21 +75,24 @@ export default {
                 }
             ],
             // 验证码验证
-            code: [
-                {
-                    required: true,
-                    message: '验证码不能为空',
-                    trigger: 'blur'
-                },
-                {
-                    min: 4,
-                    max: 4,
-                    message: '验证码必须为4位数',
-                    trigger: 'blur'
-                }
-            ],
+            requiredCode: (options: Options = {}): Rule[] => {
+                const { fieldLabel = '验证码', min = 4, max = 4 } = options;
+                return [
+                    {
+                        required: true,
+                        message: `${fieldLabel}不能为空`,
+                        trigger: 'blur'
+                    },
+                    {
+                        min,
+                        max,
+                        message: `${fieldLabel}必须为${min}位数`,
+                        trigger: 'blur'
+                    }
+                ]
+            },
             // 手机号验证
-            phone: [
+            requiredPhone: [
                 {
                     required: true,
                     message: '手机号不能为空',

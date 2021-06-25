@@ -7,7 +7,7 @@ export interface Params {
   command: string;
   mode: string;
 }
-// https://vitejs.dev/config/
+// https://vitejs.dev/config/ 不用defineConfig加上这段注释就有类型提示了
 /**
  * @type {import('vite').UserConfig}
  */
@@ -19,6 +19,7 @@ export default ({ mode, command }: Params) => {
       host: 'localhost',
       open: true,
       port: 8080,
+      hmr: true,
     },
     resolve: {
       alias: {
@@ -34,6 +35,7 @@ export default ({ mode, command }: Params) => {
     },
     plugins: [
       vue(),
+      // 解决浏览器差异性
       legacy({
         targets: ['> 1%', 'last 2 versions', 'not dead'],
       }),
