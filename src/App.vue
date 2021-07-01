@@ -11,7 +11,11 @@ export default defineComponent({
 </script>
 
 <style>
+@import url(@/styles/main.scss);
 .app {
   height: 100%;
+}
+#nprogress div.spinner {
+  display: none;
 }
 </style>

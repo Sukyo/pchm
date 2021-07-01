@@ -17,7 +17,6 @@ export default ({ mode, command }: Params) => {
     base: '/', // 部署应用时的基本URL。
     server: {
       host: 'localhost',
-      open: true,
       port: 8080,
       hmr: true,
     },

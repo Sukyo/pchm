@@ -27,7 +27,7 @@ _fetch.interceptors.response.use(function (response: AxiosResponse): any {
         if (response.data.code === 206) {
             Message({
                 type: 'error',
-                message: '会话已过期,请重新去登录',
+                message: '会话已过期,请重新登录',
                 duration: 2000
             })
             removeLocal('token');

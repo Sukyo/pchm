@@ -47,10 +47,8 @@ const useInitData = () => {
       path: '/layout/subject',
     },
   ]
-  // const defaultActive = ref<string>('/layout/chart')
   return {
     menuList,
-    // defaultActive,
   }
 }
 export default defineComponent({

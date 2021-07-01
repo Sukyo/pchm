@@ -9,13 +9,14 @@
   </header>
 </template>
 
-<script>
-import { defineComponent } from 'vue'
+<script lang="ts">
+import { computed, defineComponent, onMounted } from 'vue'
 import { ElMessageBox as MessageBox, ElMessage as Message } from 'element-plus'
 import router from '@/router'
 import { removeLocal } from '@/utils/local'
 import { logout } from '@/api/user'
-const useInitData = (props) => {
+import { State, Store, useStore } from 'vuex'
+const useInitData = (store: Store<State>) => {
   /**
    * 注销登录
    */
@@ -28,29 +29,34 @@ const useInitData = (props) => {
       .then(() => {
         Message({
           type: 'success',
-          message: '退出登录成功',
+          message: '退出成功',
         })
         // 删除远程token
         logout().then(() => {
           // 删除本地token
           removeLocal('token')
+          // 干掉vuex用户信息
+          store.commit('SET_USER_INFO', null)
           // 跳转到登录页
           router.push('/login')
         })
       })
       .catch(() => {})
   }
+  const userInfo = store.state.userInfo
   const API_URL = import.meta.env.VITE_API_URL
   return {
     handleLogoutClick,
     API_URL,
+    userInfo,
   }
 }
 export default defineComponent({
   name: 'Header',
-  props: ['userInfo', 'isCollapse'],
-  setup(props) {
-    const initData = useInitData(props)
+  props: ['isCollapse'],
+  setup() {
+    const store = useStore()
+    const initData = useInitData(store)
     return {
       ...initData,
     }

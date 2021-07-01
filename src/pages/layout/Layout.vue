@@ -1,6 +1,6 @@
 <template>
   <section class="layout">
-    <Header @changeCollapse="changeCollapse" v-model:isCollapse="isCollapse" v-model:userInfo="userInfo" />
+    <Header @changeCollapse="changeCollapse" v-model:isCollapse="isCollapse" />
     <section class="container">
       <Aside v-model:isCollapse="isCollapse" />
       <Main class="main" />
@@ -9,22 +9,22 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, defineAsyncComponent, reactive, ref } from 'vue'
+import { defineComponent, defineAsyncComponent, ref } from 'vue'
 import { getLocal } from '@/utils/local'
 import { getUserInfo, UserInfo } from '@/api/user'
-
-const useInitData = async () => {
+import { mapState, State, Store, useStore } from 'vuex'
+const useInitData = async (store: Store<State>) => {
   const fetchUserInfo = async () => {
     const res = await getUserInfo()
-    const userInfo = reactive<UserInfo>(res.data)
-    return userInfo
+    store.commit('SET_USER_INFO', res.data)
   }
-  const userInfo = await fetchUserInfo()
+  if (!store.state.userInfo) {
+    await fetchUserInfo()
+  }
   // 菜单折叠状态
   const isCollapse = ref<boolean>(false)
   const changeCollapse = () => (isCollapse.value = !isCollapse.value)
   return {
-    userInfo,
     isCollapse,
     changeCollapse,
   }
@@ -50,7 +50,8 @@ export default defineComponent({
     return next()
   },
   async setup() {
-    const initData = await useInitData()
+    const store = useStore()
+    const initData = await useInitData(store)
     return {
       ...initData,
     }
