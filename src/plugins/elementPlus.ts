@@ -19,7 +19,8 @@ import {
     ElMessageBox,
     ElAvatar,
     ElMenu,
-    ElMenuItem
+    ElMenuItem,
+    ElSubmenu
 } from 'element-plus';
 export default {
     install: (app: any) => {
@@ -44,6 +45,7 @@ export default {
         app.component(ElAvatar.name, ElAvatar);
         app.component(ElMenu.name, ElMenu);
         app.component(ElMenuItem.name, ElMenuItem);
+        app.component(ElSubmenu.name, ElSubmenu);
         const $rules: Rules = {
             requiredBlur(options: Options = {}): Rule[] {
                 const { fieldLabel } = options;

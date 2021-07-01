@@ -33,7 +33,7 @@ _fetch.interceptors.response.use(function (response: AxiosResponse): any {
             removeLocal('token');
             // 删除token
             router.push('/login')
-            return Promise.reject(new Error(response.data)) //会报错
+            // return Promise.reject(new Error(response.data)) //会报错
         }
         return response.data;
     } else {

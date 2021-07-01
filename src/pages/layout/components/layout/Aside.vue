@@ -7,18 +7,13 @@
       :default-active="$route.path"
       :collapse="isCollapse"
     >
-      <el-menu-item v-for="item in menuList" :index="item.path" :key="item.id">
-        <i :class="[item.icon]" />
-        <template #title>
-          <span>{{ item.title }}</span>
-        </template>
-      </el-menu-item>
+      <MenuList v-model:menuList="menuList" />
     </el-menu>
   </section>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineAsyncComponent, defineComponent, ref } from 'vue'
 const useInitData = () => {
   const menuList = [
     {
@@ -67,6 +62,11 @@ export default defineComponent({
       ...initData,
     }
   },
+  components: {
+    MenuList: defineAsyncComponent({
+      loader: () => import('@/pages/layout/components/layout/components/MenuList.vue'),
+    }),
+  },
 })
 </script>
 
@@ -76,8 +76,8 @@ export default defineComponent({
     // 展开时的动画
     transition: width 0.2s;
     border-right: none;
+    min-width: 200px;
     .el-menu-item {
-      width: 200px;
       &:focus {
         background-color: #fff;
       }
