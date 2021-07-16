@@ -52,8 +52,10 @@ _fetch.interceptors.response.use(function (response: AxiosResponse): any {
 
 const _ajax = (obj: AxiosRequestConfig): Promise<any> => {
     return new Promise((resolve, rejects) => {
+        window.app!.$loading.show();
         return _fetch(obj) // 这里的_fetch是axios.create()创建的axios实例对象
-            .then(res => {
+        .then(res => {
+                window.app!.$loading.hide();
                 resolve(res)
             })
             .catch(err => {

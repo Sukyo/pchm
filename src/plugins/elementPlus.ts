@@ -20,7 +20,10 @@ import {
     ElAvatar,
     ElMenu,
     ElMenuItem,
-    ElSubmenu
+    ElSubmenu,
+    ElTable,
+    ElTableColumn,
+    ElPagination,
 } from 'element-plus';
 export default {
     install: (app: any) => {
@@ -46,6 +49,9 @@ export default {
         app.component(ElMenu.name, ElMenu);
         app.component(ElMenuItem.name, ElMenuItem);
         app.component(ElSubmenu.name, ElSubmenu);
+        app.component(ElTable.name, ElTable);
+        app.component(ElTableColumn.name, ElTableColumn);
+        app.component(ElPagination.name, ElPagination);
         const $rules: Rules = {
             requiredBlur(options: Options = {}): Rule[] {
                 const { fieldLabel } = options;

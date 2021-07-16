@@ -84,6 +84,9 @@ export default defineComponent({
     return next()
   },
   setup() {
+    onMounted(()=>{
+      changeCodeUrl();
+    })
     // 获取全局规则对象
     const $rules: Rules = (getCurrentInstance()!.proxy as ComponentInstance).$rules!
     const { requiredBlur, requiredPhone, requiredCode } = $rules
